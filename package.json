@@ -1,0 +1,15 @@
+{
+  "name": "nahwexercises",
+  "version": "1.0.0",
+  "description": "A full-stack application for learning Arabic grammar (Nahw) with a React Native frontend, FastAPI backend, and SQLite database.",
+  "main": "test_connection.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.10.0"
+  }
+}
