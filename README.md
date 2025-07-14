@@ -129,3 +129,14 @@ The API will be available at `http://localhost:8000`
 - Arabic text is displayed using serif font family
 - The UI is designed with a green color scheme (#2E8B57)
 - All Arabic grammar lessons are based on the curriculum in LessonContents.md
+
+
+# New additions - Next Steps
+
+I'd like to create a new type of lesson exercise. In this exercise, the user is given a sentence and they will have to identify the irab of each word in the sentence. For example:
+`ضرب عمرُ احمدا`
+For each word, they would be given various multiple choice options.
+First question would be: what is the word type? `اسم` `فعل` or `حرف`?
+Then is it `مرفوع` `منصوب` `مجرور` or `مجزوم`. And so on.
+
+Then when that word is done, we move on to the next word in the sentence.

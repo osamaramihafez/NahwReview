@@ -113,8 +113,15 @@ async def check_answer(db: aiosqlite.Connection, exercise_id: int, user_answer: 
     if not exercise:
         return False, "Exercise not found"
     
-    is_correct = exercise['correct_answer'].lower().strip() == user_answer.lower().strip()
-    return is_correct, exercise['explanation'] or ""
+    # Handle different exercise types
+    if exercise['exercise_type'] == 'irab_analysis':
+        # For irab analysis, we consider the exercise complete when user_answer contains completion message
+        is_correct = "تم إكمال التحليل النحوي بنجاح" in user_answer
+        return is_correct, exercise['explanation'] or ""
+    else:
+        # Traditional answer checking for multiple choice and other types
+        is_correct = exercise['correct_answer'].lower().strip() == user_answer.lower().strip()
+        return is_correct, exercise['explanation'] or ""
 
 async def get_user_progress(db: aiosqlite.Connection, user_id: str) -> List[Dict[str, Any]]:
     """Get user progress for all lessons"""

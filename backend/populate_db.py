@@ -77,7 +77,7 @@ async def populate_database():
                 (
                     "Complete the sentence: الطالب _____ الكتاب",
                     "أكمل الجملة: الطالب _____ الكتاب",
-                    "fill_blank",
+                    "multiple_choice",
                     "يقرأ",
                     "يقرأ (reads) is the correct present tense verb form that agrees with الطالب (the student).",
                     lesson_ids[5] if len(lesson_ids) > 5 else lesson_ids[1]

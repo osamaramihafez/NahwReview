@@ -40,7 +40,7 @@ async def create_intermediate_exercises():
             {
                 "question": "Fill in the blank: أَكَلَ الوَلَدُ _____ (the apple)",
                 "question_arabic": "أكمل الفراغ: أَكَلَ الوَلَدُ _____",
-                "exercise_type": "fill_blank",
+                "exercise_type": "multiple_choice",
                 "correct_answer": "التُّفَّاحَةَ",
                 "explanation": "التُّفَّاحَةَ (the apple) is in the accusative case (منصوب) because it's the direct object of the verb أَكَلَ.",
                 "order": 3,
@@ -113,7 +113,7 @@ async def create_intermediate_exercises():
             {
                 "question": "Convert to present tense: كَتَبَ (he wrote)",
                 "question_arabic": "حوّل إلى المضارع: كَتَبَ",
-                "exercise_type": "fill_blank",
+                "exercise_type": "multiple_choice",
                 "correct_answer": "يَكْتُبُ",
                 "explanation": "The present tense of كَتَبَ is يَكْتُبُ (he writes/is writing). The prefix ي indicates third person masculine singular.",
                 "order": 3,
@@ -186,7 +186,7 @@ async def create_intermediate_exercises():
             {
                 "question": "Complete the nominal sentence: المُعَلِّمُ _____",
                 "question_arabic": "أكمل الجملة الاسمية: المُعَلِّمُ _____",
-                "exercise_type": "fill_blank",
+                "exercise_type": "multiple_choice",
                 "correct_answer": "مُتَمَيِّزٌ",
                 "explanation": "المُعَلِّمُ مُتَمَيِّزٌ (The teacher is excellent). The predicate must be in the nominative case with damma ending.",
                 "order": 3,
@@ -259,7 +259,7 @@ async def create_intermediate_exercises():
             {
                 "question": "Complete the sentence with the correct doer: لَعِبَ _____ في الحَدِيقَةِ",
                 "question_arabic": "أكمل الجملة بالفاعل الصحيح: لَعِبَ _____ في الحَدِيقَةِ",
-                "exercise_type": "fill_blank",
+                "exercise_type": "multiple_choice",
                 "correct_answer": "الأَطْفَالُ",
                 "explanation": "الأَطْفَالُ (the children) is correct. The doer must be in nominative case with damma ending.",
                 "order": 3,
@@ -332,7 +332,7 @@ async def create_intermediate_exercises():
             {
                 "question": "Complete with the correct direct object: قَرَأَ الطَّالِبُ _____",
                 "question_arabic": "أكمل بالمفعول به الصحيح: قَرَأَ الطَّالِبُ _____",
-                "exercise_type": "fill_blank",
+                "exercise_type": "multiple_choice",
                 "correct_answer": "الكِتَابَ",
                 "explanation": "الكِتَابَ (the book) is correct. The direct object must be in accusative case with fatha ending.",
                 "order": 3,
