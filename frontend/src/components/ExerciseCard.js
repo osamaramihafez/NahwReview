@@ -1,50 +1,29 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import MultipleChoiceExercise from './MultipleChoiceExercise';
 import IrabAnalysisExercise from './IrabAnalysisExercise';
 
 /**
  * ExerciseCard Component
  * 
- * This component has been refactored to use separate components for different exercise types.
- * All exercises are now multiple choice - fill_blank exercises have been converted to 
- * multiple_choice with options in the database.
+ * This component now exclusively handles irab analysis exercises.
+ * All lessons have been converted to use comprehensive irab analysis format
+ * for deep grammatical understanding of Arabic sentences.
  * 
- * Previously supported:
- * - multiple_choice: Multiple choice questions with selectable options
- * - fill_blank: Text input exercises (removed - converted to multiple choice)
- * 
- * Currently supported:
- * - multiple_choice: All exercises now use this type with selectable options
- * - irab_analysis: Multi-step grammatical analysis exercises for Arabic sentences
+ * Exercise Type:
+ * - irab_analysis: Multi-step grammatical analysis exercises where students
+ *   analyze each word in Arabic sentences, identifying word types, grammatical
+ *   positions, and inflection cases step by step.
  */
 
 const ExerciseCard = ({ exercise, onAnswer, showExplanation }) => {
-  const renderExercise = () => {
-    switch (exercise.exercise_type) {
-      case 'irab_analysis':
-        return (
-          <IrabAnalysisExercise 
-            exercise={exercise}
-            onAnswer={onAnswer}
-            showExplanation={showExplanation}
-          />
-        );
-      case 'multiple_choice':
-      default:
-        return (
-          <MultipleChoiceExercise 
-            exercise={exercise}
-            onAnswer={onAnswer}
-            showExplanation={showExplanation}
-          />
-        );
-    }
-  };
-
+  // All exercises are now irab_analysis type
   return (
     <View style={styles.card}>
-      {renderExercise()}
+      <IrabAnalysisExercise 
+        exercise={exercise}
+        onAnswer={onAnswer}
+        showExplanation={showExplanation}
+      />
     </View>
   );
 };

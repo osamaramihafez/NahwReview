@@ -1,20 +1,19 @@
-import aiosqlite
 import asyncio
-from typing import AsyncGenerator
+import aiosqlite
 
-DATABASE_URL = "nahw_exercises.db"
-
-async def get_db() -> AsyncGenerator[aiosqlite.Connection, None]:
-    async with aiosqlite.connect(DATABASE_URL) as db:
-        db.row_factory = aiosqlite.Row
-        yield db
-
-async def init_database():
-    """Initialize the database with tables"""
-    async with aiosqlite.connect(DATABASE_URL) as db:
+async def update_database_schema():
+    """Update database schema to support separate English and Arabic fields"""
+    async with aiosqlite.connect("nahw_exercises.db") as db:
+        
+        # Drop existing tables to recreate with new schema
+        print("Dropping existing tables...")
+        await db.execute("DROP TABLE IF EXISTS exercises")
+        await db.execute("DROP TABLE IF EXISTS lessons") 
+        await db.execute("DROP TABLE IF EXISTS levels")
+        
         # Create levels table with separate English and Arabic fields
         await db.execute("""
-            CREATE TABLE IF NOT EXISTS levels (
+            CREATE TABLE levels (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 arabic_name TEXT,
@@ -26,7 +25,7 @@ async def init_database():
         
         # Create lessons table with separate English and Arabic fields
         await db.execute("""
-            CREATE TABLE IF NOT EXISTS lessons (
+            CREATE TABLE lessons (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
                 arabic_title TEXT,
@@ -40,7 +39,7 @@ async def init_database():
         
         # Create exercises table with separate English and Arabic fields
         await db.execute("""
-            CREATE TABLE IF NOT EXISTS exercises (
+            CREATE TABLE exercises (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 question TEXT NOT NULL,
                 question_arabic TEXT,
@@ -54,27 +53,9 @@ async def init_database():
             )
         """)
         
-        # Create exercise_options table
-        await db.execute("""
-            CREATE TABLE IF NOT EXISTS exercise_options (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                option_text TEXT NOT NULL,
-                is_correct BOOLEAN DEFAULT 0,
-                exercise_id INTEGER NOT NULL,
-                FOREIGN KEY (exercise_id) REFERENCES exercises (id)
-            )
-        """)
-        
-        # Create user_progress table
-        await db.execute("""
-            CREATE TABLE IF NOT EXISTS user_progress (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT NOT NULL,
-                lesson_id INTEGER NOT NULL,
-                completed BOOLEAN DEFAULT 0,
-                score INTEGER DEFAULT 0,
-                FOREIGN KEY (lesson_id) REFERENCES lessons (id)
-            )
-        """)
-        
         await db.commit()
+        print("✅ Database schema updated successfully!")
+        print("New schema includes separate fields for English and Arabic content.")
+
+if __name__ == "__main__":
+    asyncio.run(update_database_schema())
