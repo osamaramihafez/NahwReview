@@ -53,6 +53,53 @@ async def update_database_schema():
             )
         """)
         
+        # Create translation system tables
+        await db.execute("""
+            CREATE TABLE translation_keys (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                key_name TEXT UNIQUE NOT NULL,
+                category TEXT,
+                description TEXT
+            )
+        """)
+        
+        await db.execute("""
+            CREATE TABLE translations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                translation_key_id INTEGER NOT NULL,
+                language_code TEXT NOT NULL,
+                text TEXT NOT NULL,
+                is_primary BOOLEAN DEFAULT 0,
+                FOREIGN KEY (translation_key_id) REFERENCES translation_keys (id),
+                UNIQUE(translation_key_id, language_code, text)
+            )
+        """)
+        
+        # Create exercise_options table with translation support
+        await db.execute("""
+            CREATE TABLE exercise_options (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                translation_key_id INTEGER,
+                option_text TEXT,
+                is_correct BOOLEAN DEFAULT 0,
+                exercise_id INTEGER NOT NULL,
+                FOREIGN KEY (translation_key_id) REFERENCES translation_keys (id),
+                FOREIGN KEY (exercise_id) REFERENCES exercises (id)
+            )
+        """)
+        
+        # Create user_progress table
+        await db.execute("""
+            CREATE TABLE user_progress (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT NOT NULL,
+                lesson_id INTEGER NOT NULL,
+                completed BOOLEAN DEFAULT 0,
+                score INTEGER DEFAULT 0,
+                FOREIGN KEY (lesson_id) REFERENCES lessons (id)
+            )
+        """)
+        
         await db.commit()
         print("✅ Database schema updated successfully!")
         print("New schema includes separate fields for English and Arabic content.")
