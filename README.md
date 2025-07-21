@@ -233,16 +233,36 @@ The app uses a modular translation system that eliminates the need to store dupl
 
 ### Content Management Scripts
 
-#### `setup_clean_irab_curriculum.py` - Curriculum Data
-- **Purpose**: Contains clean curriculum structure
-- **Content**: 2 levels, 5 lessons focused on irab analysis
-- **Data**: `CLEAN_LEVELS` and `CLEAN_LESSONS` arrays
-- **Usage**: Import data for curriculum setup
+#### `curriculum_data.json` - Curriculum Data (JSON Format)
+- **Purpose**: Contains all curriculum data in structured JSON format
+- **Content**: 2 levels, 5 lessons, 5 comprehensive exercises focused on irab analysis
+- **Structure**: Levels, lessons, exercises with full bilingual support
+- **Features**: Human-readable, version-controllable, language-agnostic
+- **Usage**: Edit directly or use validation/loading scripts
 
-#### `setup_english_primary_curriculum.py` - English-Primary Content
-- **Purpose**: Set up curriculum with English as primary language
-- **Features**: Bilingual content with English descriptions
-- **Usage**: `python setup_english_primary_curriculum.py`
+#### `load_curriculum.py` - JSON-to-Database Loader
+- **Purpose**: Populate database from JSON curriculum data
+- **Features**: 
+  - Clears existing data safely
+  - Loads levels, lessons, and exercises from JSON
+  - Provides detailed progress feedback
+  - Shows curriculum summary after loading
+- **Usage**: `python load_curriculum.py`
+
+#### `validate_curriculum.py` - JSON Validation
+- **Purpose**: Validate curriculum JSON structure and content
+- **Features**:
+  - Checks required fields and data types
+  - Validates ID uniqueness and references
+  - Provides detailed error reporting
+  - Shows statistics (total questions, etc.)
+- **Usage**: `python validate_curriculum.py`
+
+#### `setup_clean_irab_curriculum.py` - Legacy Curriculum Setup (Deprecated)
+- **Purpose**: Original Python-based curriculum setup
+- **Status**: ⚠️ Deprecated - Use JSON-based system instead
+- **Migration**: Data moved to `curriculum_data.json`
+- **Usage**: Archived for reference only
 
 #### `create_intermediate_exercises.py` - Exercise Creation
 - **Purpose**: Bulk create intermediate-level exercises
@@ -491,7 +511,77 @@ The API will be available at `http://localhost:8000`
 
 ## 🔄 Development Workflow
 
-### Adding New Content
+### JSON-Based Curriculum Management (Recommended)
+
+1. **Validate Current Data**
+   ```bash
+   cd backend
+   python validate_curriculum.py
+   ```
+
+2. **Edit Curriculum Data**
+   - Open `curriculum_data.json` in your editor
+   - Make changes to levels, lessons, or exercises
+   - Ensure proper JSON structure and encoding
+
+3. **Validate Changes**
+   ```bash
+   python validate_curriculum.py
+   ```
+
+4. **Load into Database**
+   ```bash
+   python load_curriculum.py
+   ```
+
+5. **Test Backend**
+   ```bash
+   python main.py  # Start the API server
+   ```
+
+### Adding New Content (JSON Method)
+
+1. **Add New Level**
+   ```json
+   {
+     "id": 3,
+     "name": "Level 3 - Advanced Grammar",
+     "arabic_name": "المستوى الثالث - النحو المتقدم",
+     "description": "Advanced grammatical structures",
+     "arabic_description": "التراكيب النحوية المتقدمة",
+     "order": 3
+   }
+   ```
+
+2. **Add New Lesson**
+   ```json
+   {
+     "id": 6,
+     "title": "Conditional Sentences",
+     "arabic_title": "الجمل الشرطية",
+     "description": "Learn about conditional structures",
+     "arabic_description": "تعلم التراكيب الشرطية",
+     "order": 1,
+     "level_id": 3
+   }
+   ```
+
+3. **Add New Exercise**
+   ```json
+   {
+     "id": 6,
+     "question": "Analyze the following sentence grammatically",
+     "question_arabic": "حلل الجملة التالية نحوياً",
+     "exercise_type": "irab_analysis",
+     "lesson_id": 6,
+     "order": 1,
+     "explanation": "Example explanation",
+     "arabic_explanation": "شرح المثال",
+     "data": {"sentence": "إن تدرس تنجح", "words": [...]}
+   }
+   ```
+
+### Legacy Python-Based Content Management
 
 1. **Create Exercise with Translation Keys**
    ```python
