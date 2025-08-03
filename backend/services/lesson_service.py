@@ -1,6 +1,6 @@
 import aiosqlite
 from typing import List, Dict, Any, Optional
-import schemas
+import data.schemas as schemas
 
 async def get_lessons_by_level(db: aiosqlite.Connection, level_id: int) -> List[Dict[str, Any]]:
     """Get all lessons for a level ordered by order"""
@@ -28,6 +28,39 @@ async def create_lesson(db: aiosqlite.Connection, lesson: schemas.LessonCreate) 
         
         # Return the created lesson
         return await get_lesson_by_id(db, lesson_id)
+
+async def update_lesson(db: aiosqlite.Connection, lesson_id: int, lesson: schemas.LessonCreate) -> Optional[Dict[str, Any]]:
+    """Update an existing lesson"""
+    async with db.execute(
+        "UPDATE lessons SET title = ?, arabic_title = ?, description = ?, \"order\" = ?, level_id = ? WHERE id = ?",
+        (lesson.title, lesson.arabic_title, lesson.description, lesson.order, lesson.level_id, lesson_id)
+    ) as cursor:
+        await db.commit()
+        if cursor.rowcount == 0:
+            return None
+        
+        # Return the updated lesson
+        return await get_lesson_by_id(db, lesson_id)
+
+async def delete_lesson(db: aiosqlite.Connection, lesson_id: int) -> bool:
+    """Delete a lesson and all its associated exercises"""
+    try:
+        # Delete exercise options first
+        await db.execute(
+            "DELETE FROM exercise_options WHERE exercise_id IN (SELECT id FROM exercises WHERE lesson_id = ?)",
+            (lesson_id,)
+        )
+        
+        # Delete exercises
+        await db.execute("DELETE FROM exercises WHERE lesson_id = ?", (lesson_id,))
+        
+        # Delete the lesson
+        async with db.execute("DELETE FROM lessons WHERE id = ?", (lesson_id,)) as cursor:
+            await db.commit()
+            return cursor.rowcount > 0
+    except Exception:
+        await db.rollback()
+        return False
 
 async def get_next_lesson(db: aiosqlite.Connection, current_lesson_id: int) -> Optional[Dict[str, Any]]:
     """Get the next lesson in the same level"""

@@ -9,6 +9,9 @@ const api = axios.create({
   },
 });
 
+// Export the base api for admin dashboard
+export { api };
+
 export const levelsAPI = {
   getLevels: () => api.get('/levels'),
   getLevel: (id) => api.get(`/levels/${id}`),

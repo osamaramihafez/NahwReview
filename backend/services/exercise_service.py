@@ -1,6 +1,6 @@
 import aiosqlite
 from typing import List, Dict, Any, Optional, Tuple
-import schemas
+import data.schemas as schemas
 
 async def get_exercises_by_lesson(db: aiosqlite.Connection, lesson_id: int) -> List[Dict[str, Any]]:
     """Get all exercises for a lesson ordered by order"""
@@ -55,6 +55,49 @@ async def create_exercise(db: aiosqlite.Connection, exercise: schemas.ExerciseCr
         
         # Return the created exercise
         return await get_exercise_by_id(db, exercise_id)
+
+async def update_exercise(db: aiosqlite.Connection, exercise_id: int, exercise: schemas.ExerciseCreate) -> Optional[Dict[str, Any]]:
+    """Update an existing exercise with options"""
+    try:
+        # Update the exercise
+        async with db.execute(
+            "UPDATE exercises SET question = ?, question_arabic = ?, exercise_type = ?, correct_answer = ?, explanation = ?, \"order\" = ?, lesson_id = ? WHERE id = ?",
+            (exercise.question, exercise.question_arabic, exercise.exercise_type, exercise.correct_answer, exercise.explanation, getattr(exercise, 'order', 0), exercise.lesson_id, exercise_id)
+        ) as cursor:
+            if cursor.rowcount == 0:
+                return None
+        
+        # Delete existing options
+        await db.execute("DELETE FROM exercise_options WHERE exercise_id = ?", (exercise_id,))
+        
+        # Add new options
+        for option in exercise.options:
+            await db.execute(
+                "INSERT INTO exercise_options (option_text, is_correct, exercise_id) VALUES (?, ?, ?)",
+                (option.option_text, option.is_correct, exercise_id)
+            )
+        
+        await db.commit()
+        
+        # Return the updated exercise
+        return await get_exercise_by_id(db, exercise_id)
+    except Exception:
+        await db.rollback()
+        return None
+
+async def delete_exercise(db: aiosqlite.Connection, exercise_id: int) -> bool:
+    """Delete an exercise and all its options"""
+    try:
+        # Delete exercise options first
+        await db.execute("DELETE FROM exercise_options WHERE exercise_id = ?", (exercise_id,))
+        
+        # Delete the exercise
+        async with db.execute("DELETE FROM exercises WHERE id = ?", (exercise_id,)) as cursor:
+            await db.commit()
+            return cursor.rowcount > 0
+    except Exception:
+        await db.rollback()
+        return False
 
 async def check_answer(db: aiosqlite.Connection, exercise_id: int, user_answer: str) -> Tuple[bool, str]:
     """Check if user answer is correct"""

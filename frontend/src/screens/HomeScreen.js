@@ -5,7 +5,8 @@ import {
   StyleSheet, 
   FlatList, 
   ActivityIndicator,
-  Alert 
+  Alert,
+  TouchableOpacity 
 } from 'react-native';
 import { levelsAPI } from '../services/api';
 import LevelCard from '../components/LevelCard';
@@ -53,9 +54,19 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Nahw Exercises</Text>
-        <Text style={styles.subtitle}>Master Arabic Grammar</Text>
-        <Text style={styles.arabicTitle}>تمارين النحو</Text>
+        <View style={styles.headerContent}>
+          <View style={styles.titleSection}>
+            <Text style={styles.title}>Nahw Exercises</Text>
+            <Text style={styles.subtitle}>Master Arabic Grammar</Text>
+            <Text style={styles.arabicTitle}>تمارين النحو</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.adminButton}
+            onPress={() => navigation.navigate('Admin')}
+          >
+            <Text style={styles.adminButtonText}>⚙️ Admin</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       
       <FlatList
@@ -90,7 +101,14 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 30,
     paddingHorizontal: 20,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  titleSection: {
+    alignItems: 'flex-start',
   },
   title: {
     fontSize: 28,
@@ -107,6 +125,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#ffffff',
     fontFamily: 'serif',
+  },
+  adminButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  adminButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   levelsList: {
     paddingTop: 20,

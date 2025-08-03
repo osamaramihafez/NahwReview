@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from database import init_database
+from data.database import init_database
 from routes import levels, lessons, exercises, users
 
 @asynccontextmanager

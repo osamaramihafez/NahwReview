@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 import aiosqlite
 from typing import List
-import schemas
-from database import get_db
+import data.schemas as schemas
+from data.database import get_db
 import services.user_service as user_service
 
 router = APIRouter(prefix="/users", tags=["users"])

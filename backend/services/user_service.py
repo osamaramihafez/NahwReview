@@ -1,6 +1,6 @@
 import aiosqlite
 from typing import List, Dict, Any, Optional
-import schemas
+import data.schemas as schemas
 
 async def get_user_progress(db: aiosqlite.Connection, user_id: str) -> List[Dict[str, Any]]:
     """Get user progress for all lessons"""

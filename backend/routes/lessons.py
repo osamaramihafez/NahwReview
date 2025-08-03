@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 import aiosqlite
 from typing import List
-import schemas
-from database import get_db
+import data.schemas as schemas
+from data.database import get_db
 import services.lesson_service as lesson_service
 import services.exercise_service as exercise_service
 
@@ -19,6 +19,20 @@ async def get_lesson(lesson_id: int, db: aiosqlite.Connection = Depends(get_db))
 async def create_lesson(lesson: schemas.LessonCreate, db: aiosqlite.Connection = Depends(get_db)):
     lesson_data = await lesson_service.create_lesson(db, lesson)
     return schemas.Lesson(**lesson_data)
+
+@router.put("/{lesson_id}", response_model=schemas.Lesson)
+async def update_lesson(lesson_id: int, lesson: schemas.LessonCreate, db: aiosqlite.Connection = Depends(get_db)):
+    lesson_data = await lesson_service.update_lesson(db, lesson_id, lesson)
+    if not lesson_data:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    return schemas.Lesson(**lesson_data)
+
+@router.delete("/{lesson_id}")
+async def delete_lesson(lesson_id: int, db: aiosqlite.Connection = Depends(get_db)):
+    success = await lesson_service.delete_lesson(db, lesson_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    return {"message": "Lesson deleted successfully"}
 
 @router.get("/{lesson_id}/exercises", response_model=List[schemas.Exercise])
 async def get_exercises_by_lesson(lesson_id: int, db: aiosqlite.Connection = Depends(get_db)):
