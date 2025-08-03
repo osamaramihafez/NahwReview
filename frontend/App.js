@@ -7,6 +7,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import LessonsScreen from './src/screens/LessonsScreen';
 import ExercisesScreen from './src/screens/ExercisesScreen';
 import AdminDashboard from './src/screens/AdminDashboard';
+import AdminLogin from './src/screens/AdminLogin';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,7 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style="light" backgroundColor="#2E8B57" />
       <Stack.Navigator
-        initialRouteName="Admin"
+        initialRouteName="Home"
         screenOptions={{
           headerShown: false,
         }}
@@ -23,7 +24,8 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Lessons" component={LessonsScreen} />
         <Stack.Screen name="Exercises" component={ExercisesScreen} />
-        <Stack.Screen name="Admin" component={AdminDashboard} />
+        <Stack.Screen name="AdminLogin" component={AdminLogin} />
+        <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
       </Stack.Navigator>
     </NavigationContainer>
   );

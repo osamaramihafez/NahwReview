@@ -7,6 +7,10 @@ import ExercisesAdmin from '../components/admin/ExercisesAdmin';
 const AdminDashboard = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('levels');
 
+  const handleLogout = () => {
+    navigation.replace('Home');
+  };
+
   const tabs = [
     { id: 'levels', title: 'Levels', icon: '📚' },
     { id: 'lessons', title: 'Lessons', icon: '📖' },
@@ -29,6 +33,9 @@ const AdminDashboard = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={handleLogout}>
+          <Text style={styles.backButtonText}>← Logout</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>Admin Dashboard</Text>
         <View style={styles.spacer} />
       </View>

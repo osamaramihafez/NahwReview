@@ -56,13 +56,12 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <View style={styles.titleSection}>
-            <Text style={styles.title}>Nahw Exercises</Text>
-            <Text style={styles.subtitle}>Master Arabic Grammar</Text>
-            <Text style={styles.arabicTitle}>تمارين النحو</Text>
+            <Text style={styles.title}>Nahw Exercises through Qasas Al-Nabiyeen</Text>
+            <Text style={styles.arabicTitle}>تمارين النحو بكتاب قصص النبيين</Text>
           </View>
           <TouchableOpacity 
             style={styles.adminButton}
-            onPress={() => navigation.navigate('Admin')}
+            onPress={() => navigation.navigate('AdminLogin')}
           >
             <Text style={styles.adminButtonText}>⚙️ Admin</Text>
           </TouchableOpacity>
